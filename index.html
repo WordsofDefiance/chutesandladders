@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chutes and Ladders</title>
+</head>
+<body>
+    <h1 id="declare-winner"></h1>
+    <ul id="position-log"></ul>
+
+    <script src="classes/board.js"></script>
+    <script src="classes/player.js"></script>
+
+    <script type="text/javascript">
+
+        //Create the new board
+        const board = new Board(100);
+
+        // create the chutes and ladders
+
+        board[1].portal = 37;
+        board[3].portal = 13;
+        board[8].portal = 31;
+        board[15].portal = 5;
+        board[20].portal = 40;
+        board[35].portal = 44;
+        board[39].portal = 42;
+        board[46].portal = 27;
+        board[48].portal = 17;
+        board[50].portal = 66;
+        board[55].portal = 52;
+        board[61].portal = 18;
+        board[74].portal = 25;
+        board[79].portal = 87;
+        board[80].portal = 65;
+        board[88].portal = 98;
+        board[91].portal = 35;
+        board[95].portal = 4;
+
+        // create the player arrays
+        const player1 = new Player(1,"human", 0);
+        const player2 = new Player(2, "cpu", 0);
+        const player3 = new Player(3, "cpu", 0);
+        const player4 = new Player(4, "cpu", 0);
+
+        const players = [ player1, player2, player3, player4 ];
+
+        // start the game!
+        // if game is in progress, role the 10-sided die until someone reaches the end of the board!
+        // declare a winner at the end
+
+        let game = "in progress";
+
+        while ( game === "in progress") {
+            players.forEach( function(element) {
+                element.position += spin();
+                if (element.position >= board.length) {
+                    console.log("player" + element.id + " wins!");
+                    document.querySelector('#declare-winner').innerText = "player" + element.id + " wins!";
+                    game = "over";
+                }
+                if ( game != "over" && board[element.position].portal != undefined ) {
+                    player1.position = board[element.position].portal;
+                    console.log(element.id + " portal!");
+                }
+                var node = document.createElement('li');
+                var text = document.createTextNode("player" + element.id + " position: " + element.position);
+                node.appendChild(text);
+                document.querySelector('#position-log').appendChild(node);
+            });
+        }
+
+        function spin() {
+            return Math.floor(Math.random() * 10) + 1;
+        }
+        
+
+
+    </script>
+</body>
+</html>
